@@ -34,6 +34,7 @@ namespace starkov.Faker.Server
       var errors = new List<string>();
       var createdEntityCount = 0;
       var firstEntityId = 0;
+      var isNeedAddAttachment = true;
       for (var i = 0; i < args.Count; i++)
       {
         using (Sungero.Domain.Session session = new Sungero.Domain.Session(true, false))
@@ -122,7 +123,13 @@ namespace starkov.Faker.Server
           try
           {
             entity.Save();
-            attachments.Add(entity);
+            if (isNeedAddAttachment)
+            {
+              if (attachments.Count >= 30)
+                isNeedAddAttachment = false;
+              
+              attachments.Add(entity);
+            }
             createdEntityCount++;
             if (firstEntityId == 0)
               firstEntityId = entity.Id;
