@@ -58,4 +58,20 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <data name="DialogDataInput" xml:space="preserve">
+    <value>Data input</value>
+  </data>
+  <data name="DialogFieldEntityToFill" xml:space="preserve">
+    <value>Entity to fill</value>
+  </data>
+  <data name="DialogFieldEntityCreateCount" xml:space="preserve">
+    <value>Number of records to be created</value>
+  </data>
+  <data name="MessageEntityGenerationProcessStarted" xml:space="preserve">
+    <value>Entity generation process started successfully</value>
+  </data>
+  <data name="AsyncEndWorkMessage" xml:space="preserve">
+    <value>The entity generation process has completed its work.
+More details are sent in the notification.</value>
+  </data>
 </root>

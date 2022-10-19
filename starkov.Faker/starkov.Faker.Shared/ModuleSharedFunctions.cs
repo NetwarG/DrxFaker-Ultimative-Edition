@@ -70,7 +70,7 @@ namespace starkov.Faker.Shared
     /// <summary>
     /// Получить список типов реквизитов, которые не доступны для выбора
     /// </summary>
-    /// <returns>Список реквизитов</returns>
+    /// <returns>Список типов</returns>
     public virtual List<object> GetExcludePropertyTypes()
     {
       return new List<object> {

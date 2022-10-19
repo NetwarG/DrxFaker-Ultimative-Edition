@@ -145,7 +145,13 @@
   "PublicStructures": [],
   "ResourceInterfaceAssemblyName": "Sungero.Domain.Interfaces",
   "ResourceInterfaceNamespace": "starkov.Faker",
-  "ResourcesKeys": [],
+  "ResourcesKeys": [
+    "DialogDataInput",
+    "DialogFieldEntityToFill",
+    "DialogFieldEntityCreateCount",
+    "MessageEntityGenerationProcessStarted",
+    "AsyncEndWorkMessage"
+  ],
   "ServerAssemblyName": "starkov.Faker.Server",
   "ServerNamespace": "starkov.Faker.Server",
   "SharedAssemblyName": "starkov.Faker.Shared",

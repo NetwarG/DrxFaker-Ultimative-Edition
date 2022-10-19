@@ -58,4 +58,20 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <data name="DialogDataInput" xml:space="preserve">
+    <value>Ввод данных</value>
+  </data>
+  <data name="DialogFieldEntityToFill" xml:space="preserve">
+    <value>Сущность для заполнения</value>
+  </data>
+  <data name="DialogFieldEntityCreateCount" xml:space="preserve">
+    <value>Количество создаваемых записей</value>
+  </data>
+  <data name="MessageEntityGenerationProcessStarted" xml:space="preserve">
+    <value>Процесс по генерации сущностей успешно запущен</value>
+  </data>
+  <data name="AsyncEndWorkMessage" xml:space="preserve">
+    <value>Процесс по генерации сущностей завершил свою работу.
+Более детальная информация отправлена в уведомлении.</value>
+  </data>
 </root>

@@ -22,7 +22,7 @@ namespace starkov.Faker.Server
     /// <param name="from">Текстовая дата начала промежутка</param>
     /// <param name="to">Текстовая дата окончания промежутка</param>
     /// <returns>Дата</returns>
-    public static DateTime GenerateDateByPeriod(string from, string to)
+    public virtual DateTime GenerateDateByPeriod(string from, string to)
     {
       DateTime startDate;
       DateTime endDate;
@@ -42,7 +42,7 @@ namespace starkov.Faker.Server
     /// Генерация логического значения
     /// </summary>
     /// <returns>True или false</returns>
-    public static bool GenerateRandomBool()
+    public virtual bool GenerateRandomBool()
     {
       var faker = new Bogus.Faker();
       return faker.Random.Bool();
@@ -57,7 +57,7 @@ namespace starkov.Faker.Server
     /// </summary>
     /// <param name="strLength">Длина числа, в виде текста</param>
     /// <returns>Число</returns>
-    public static int GenerateNumberWithLength(string strLength)
+    public virtual int GenerateNumberWithLength(string strLength)
     {
       int length;
       if (!int.TryParse(strLength, out length))
@@ -75,7 +75,7 @@ namespace starkov.Faker.Server
     /// <param name="from">Начало диапазона, в виде текста</param>
     /// <param name="to">Конец диапазона, в виде текста</param>
     /// <returns>Число</returns>
-    public static int GenerateNumberByRange(string from, string to)
+    public virtual int GenerateNumberByRange(string from, string to)
     {
       int startInt;
       int endInt;
@@ -94,7 +94,7 @@ namespace starkov.Faker.Server
     /// Генерация случайной строки
     /// </summary>
     /// <returns>Строка</returns>
-    public static string GenerateStringSentence()
+    public virtual string GenerateStringSentence()
     {
       var faker = new Bogus.Faker("ru");
       return faker.Lorem.Sentence(faker.Random.Int(1, 5));
@@ -104,7 +104,7 @@ namespace starkov.Faker.Server
     /// Генерация параграфа
     /// </summary>
     /// <returns>Параграф</returns>
-    public static string GenerateStringParagraph()
+    public virtual string GenerateStringParagraph()
     {
       var faker = new Bogus.Faker("ru");
       return faker.Lorem.Paragraph();
@@ -114,7 +114,7 @@ namespace starkov.Faker.Server
     /// Генерация номера мобильного телефона
     /// </summary>
     /// <returns>Номер телефона</returns>
-    public static string GenerateStringPhone()
+    public virtual string GenerateStringPhone()
     {
       var faker = new Bogus.Faker("ru");
       return "+7" + faker.Phone.PhoneNumber();
@@ -124,7 +124,7 @@ namespace starkov.Faker.Server
     /// Генерация числа в виде строки
     /// </summary>
     /// <returns>Число в виде строки</returns>
-    public static string GenerateStringNumber()
+    public virtual string GenerateStringNumber()
     {
       var faker = new Bogus.Faker();
       return faker.Random.Int(0, 1000000).ToString();
@@ -135,7 +135,7 @@ namespace starkov.Faker.Server
     /// </summary>
     /// <param name="gender">Пол</param>
     /// <returns>Имя</returns>
-    public static string GenerateStringFirstName(string gender)
+    public virtual string GenerateStringFirstName(string gender)
     {
       var faker = new Bogus.Faker("ru");
       Bogus.DataSets.Name.Gender enumGender;
@@ -150,7 +150,7 @@ namespace starkov.Faker.Server
     /// </summary>
     /// <param name="gender">Пол</param>
     /// <returns>Фамилия</returns>
-    public static string GenerateStringLastName(string gender)
+    public virtual string GenerateStringLastName(string gender)
     {
       var faker = new Bogus.Faker("ru");
       Bogus.DataSets.Name.Gender enumGender;
@@ -165,7 +165,7 @@ namespace starkov.Faker.Server
     /// </summary>
     /// <param name="gender">Пол</param>
     /// <returns>ФИО</returns>
-    public static string GenerateStringFullName(string gender)
+    public virtual string GenerateStringFullName(string gender)
     {
       var faker = new Bogus.Faker("ru");
       Bogus.DataSets.Name.Gender enumGender;
@@ -179,7 +179,7 @@ namespace starkov.Faker.Server
     /// Генерация случайного названия должности
     /// </summary>
     /// <returns>Название должности</returns>
-    public static string GenerateStringJobTitle()
+    public virtual string GenerateStringJobTitle()
     {
       var faker = new Bogus.Faker("ru");
       return faker.Name.JobTitle();
@@ -189,7 +189,7 @@ namespace starkov.Faker.Server
     /// Генерация случайного email
     /// </summary>
     /// <returns>Email</returns>
-    public static string GenerateStringEmail()
+    public virtual string GenerateStringEmail()
     {
       var faker = new Bogus.Faker("ru");
       return faker.Person.Email;
@@ -199,7 +199,7 @@ namespace starkov.Faker.Server
     /// Генерация случайного логина
     /// </summary>
     /// <returns>Логин</returns>
-    public static string GenerateStringLogin()
+    public virtual string GenerateStringLogin()
     {
       var faker = new Bogus.Faker();
       return faker.Internet.UserName();
@@ -209,7 +209,7 @@ namespace starkov.Faker.Server
     /// Генерация случайного субъекта федерации
     /// </summary>
     /// <returns>Субъект федерации</returns>
-    public static string GenerateStringState()
+    public virtual string GenerateStringState()
     {
       var faker = new Bogus.Faker("ru");
       return faker.Person.Address.State;
@@ -219,7 +219,7 @@ namespace starkov.Faker.Server
     /// Генерация случайного города
     /// </summary>
     /// <returns>Город</returns>
-    public static string GenerateStringCity()
+    public virtual string GenerateStringCity()
     {
       var faker = new Bogus.Faker("ru");
       return faker.Person.Address.City;
@@ -229,7 +229,7 @@ namespace starkov.Faker.Server
     /// Генерация случайной улицы
     /// </summary>
     /// <returns>Улица</returns>
-    public static string GenerateStringStreet()
+    public virtual string GenerateStringStreet()
     {
       var faker = new Bogus.Faker("ru");
       return faker.Person.Address.Street;
@@ -239,7 +239,7 @@ namespace starkov.Faker.Server
     /// Генерация случайного подразделения
     /// </summary>
     /// <returns>Название подразделения</returns>
-    public static string GenerateStringDepartment()
+    public virtual string GenerateStringDepartment()
     {
       var faker = new Bogus.Faker("ru");
       return faker.Commerce.Department();
@@ -249,7 +249,7 @@ namespace starkov.Faker.Server
     /// Генерация случайной организации
     /// </summary>
     /// <returns>Название организации</returns>
-    public static string GenerateStringCompanyName()
+    public virtual string GenerateStringCompanyName()
     {
       var faker = new Bogus.Faker("ru");
       return faker.Company.CompanyName();
@@ -264,7 +264,7 @@ namespace starkov.Faker.Server
     /// </summary>
     /// <param name="enumvalues">Список значений перечислений</param>
     /// <returns>Перечисление</returns>
-    public static Enumeration PickRandomEnumeration(List<string> enumvalues)
+    public virtual Enumeration PickRandomEnumeration(List<string> enumvalues)
     {
       var faker = new Bogus.Faker();
       var selectedString = faker.PickRandom(enumvalues);
@@ -281,7 +281,7 @@ namespace starkov.Faker.Server
     /// <param name="typeGuid">Guid типа сущности</param>
     /// <param name="documentTypeGuid">Guid типа документа</param>
     /// <returns>Случайно выбранная сущность</returns>
-    public static IEntity PickRandomEntity(string typeGuid, string documentTypeGuid)
+    public virtual IEntity PickRandomEntity(string typeGuid, string documentTypeGuid)
     {
       var entities = Functions.Module.GetEntitiesByTypeGuid(typeGuid, documentTypeGuid);
       if (!entities.Any())
@@ -295,7 +295,7 @@ namespace starkov.Faker.Server
     /// Выбор случайного не использующегося логина
     /// </summary>
     /// <returns>Случайно выбранный логин</returns>
-    public static ILogin PickRandomLogin()
+    public virtual ILogin PickRandomLogin()
     {
       var logins = Functions.Module.GetAllUnusedLogins();
       if (!logins.Any())
@@ -316,7 +316,7 @@ namespace starkov.Faker.Server
     /// </summary>
     /// <param name="parameterRow">Строка с параметрами</param>
     /// <returns>Значение свойства</returns>
-    public object GetPropertyValueByParameters(IParametersMatchingParameters parameterRow)
+    public virtual object GetPropertyValueByParameters(IParametersMatchingParameters parameterRow)
     {
       object result = null;
       if (parameterRow == null)
@@ -343,14 +343,14 @@ namespace starkov.Faker.Server
     /// </summary>
     /// <param name="parameterRow">Строка с параметрами</param>
     /// <returns>Дата</returns>
-    public DateTime GetDateByParameters(IParametersMatchingParameters parameterRow)
+    public virtual DateTime GetDateByParameters(IParametersMatchingParameters parameterRow)
     {
       DateTime date = Calendar.Today;
       
-      if (parameterRow.FillOption == Constants.Module.Common.FixedValue && Calendar.TryParseDate(parameterRow.ChosenValue, out date))
+      if (parameterRow.FillOption == Constants.Module.FillOptions.Common.FixedValue && Calendar.TryParseDate(parameterRow.ChosenValue, out date))
         return date;
       
-      if (parameterRow.FillOption == Constants.Module.Date.Period)
+      if (parameterRow.FillOption == Constants.Module.FillOptions.Date.Period)
         date = Functions.Module.GenerateDateByPeriod(parameterRow.ValueFrom, parameterRow.ValueTo);
       
       return date;
@@ -361,14 +361,14 @@ namespace starkov.Faker.Server
     /// </summary>
     /// <param name="parameterRow">Строка с параметрами</param>
     /// <returns>Логическое значение</returns>
-    public bool GetBoolByParameters(IParametersMatchingParameters parameterRow)
+    public virtual bool GetBoolByParameters(IParametersMatchingParameters parameterRow)
     {
       bool logic = false;
       
-      if (parameterRow.FillOption == Constants.Module.Common.FixedValue && bool.TryParse(parameterRow.ChosenValue, out logic))
+      if (parameterRow.FillOption == Constants.Module.FillOptions.Common.FixedValue && bool.TryParse(parameterRow.ChosenValue, out logic))
         return logic;
       
-      if (parameterRow.FillOption == Constants.Module.Common.RandomValue)
+      if (parameterRow.FillOption == Constants.Module.FillOptions.Common.RandomValue)
         logic = Functions.Module.GenerateRandomBool();
       
       return logic;
@@ -379,16 +379,16 @@ namespace starkov.Faker.Server
     /// </summary>
     /// <param name="parameterRow">Строка с параметрами</param>
     /// <returns>Число</returns>
-    public int GetIntByParameters(IParametersMatchingParameters parameterRow)
+    public virtual int GetIntByParameters(IParametersMatchingParameters parameterRow)
     {
       int num = 0;
       
-      if (parameterRow.FillOption == Constants.Module.Common.FixedValue && int.TryParse(parameterRow.ChosenValue, out num))
+      if (parameterRow.FillOption == Constants.Module.FillOptions.Common.FixedValue && int.TryParse(parameterRow.ChosenValue, out num))
         return num;
       
-      if (parameterRow.FillOption == Constants.Module.Numeric.NumberWithLength)
+      if (parameterRow.FillOption == Constants.Module.FillOptions.Numeric.NumberWithLength)
         num = Functions.Module.GenerateNumberWithLength(parameterRow.ChosenValue);
-      else if (parameterRow.FillOption == Constants.Module.Numeric.NumberRange)
+      else if (parameterRow.FillOption == Constants.Module.FillOptions.Numeric.NumberRange)
         num = Functions.Module.GenerateNumberByRange(parameterRow.ValueFrom, parameterRow.ValueTo);
       
       return num;
@@ -399,41 +399,41 @@ namespace starkov.Faker.Server
     /// </summary>
     /// <param name="parameterRow">Строка с параметрами</param>
     /// <returns>Строка</returns>
-    public string GetStringByParameters(IParametersMatchingParameters parameterRow)
+    public virtual string GetStringByParameters(IParametersMatchingParameters parameterRow)
     {
       var str = string.Empty;
       
-      if (parameterRow.FillOption == Constants.Module.Common.FixedValue)
+      if (parameterRow.FillOption == Constants.Module.FillOptions.Common.FixedValue)
         str = parameterRow.ChosenValue;
-      else if (parameterRow.FillOption == Constants.Module.String.RandomString)
+      else if (parameterRow.FillOption == Constants.Module.FillOptions.String.RandomString)
         str = Functions.Module.GenerateStringSentence();
-      else if (parameterRow.FillOption == Constants.Module.String.Paragraph)
+      else if (parameterRow.FillOption == Constants.Module.FillOptions.String.Paragraph)
         str = Functions.Module.GenerateStringParagraph();
-      else if (parameterRow.FillOption == Constants.Module.String.RandomPhone)
+      else if (parameterRow.FillOption == Constants.Module.FillOptions.String.RandomPhone)
         str = Functions.Module.GenerateStringPhone();
-      else if (parameterRow.FillOption == Constants.Module.String.NumberInStr)
+      else if (parameterRow.FillOption == Constants.Module.FillOptions.String.NumberInStr)
         str = Functions.Module.GenerateStringNumber();
-      else if (parameterRow.FillOption == Constants.Module.String.FirstName)
+      else if (parameterRow.FillOption == Constants.Module.FillOptions.String.FirstName)
         str = Functions.Module.GenerateStringFirstName(parameterRow.ChosenValue);
-      else if (parameterRow.FillOption == Constants.Module.String.LastName)
+      else if (parameterRow.FillOption == Constants.Module.FillOptions.String.LastName)
         str = Functions.Module.GenerateStringLastName(parameterRow.ChosenValue);
-      else if (parameterRow.FillOption == Constants.Module.String.FullName)
+      else if (parameterRow.FillOption == Constants.Module.FillOptions.String.FullName)
         str = Functions.Module.GenerateStringFullName(parameterRow.ChosenValue);
-      else if (parameterRow.FillOption == Constants.Module.String.JobTitle)
+      else if (parameterRow.FillOption == Constants.Module.FillOptions.String.JobTitle)
         str = Functions.Module.GenerateStringJobTitle();
-      else if (parameterRow.FillOption == Constants.Module.String.Email)
+      else if (parameterRow.FillOption == Constants.Module.FillOptions.String.Email)
         str = Functions.Module.GenerateStringEmail();
-      else if (parameterRow.FillOption == Constants.Module.String.Login)
+      else if (parameterRow.FillOption == Constants.Module.FillOptions.String.Login)
         str = Functions.Module.GenerateStringLogin();
-      else if (parameterRow.FillOption == Constants.Module.String.State)
+      else if (parameterRow.FillOption == Constants.Module.FillOptions.String.State)
         str = Functions.Module.GenerateStringState();
-      else if (parameterRow.FillOption == Constants.Module.String.City)
+      else if (parameterRow.FillOption == Constants.Module.FillOptions.String.City)
         str = Functions.Module.GenerateStringCity();
-      else if (parameterRow.FillOption == Constants.Module.String.Street)
+      else if (parameterRow.FillOption == Constants.Module.FillOptions.String.Street)
         str = Functions.Module.GenerateStringStreet();
-      else if (parameterRow.FillOption == Constants.Module.String.Department)
+      else if (parameterRow.FillOption == Constants.Module.FillOptions.String.Department)
         str = Functions.Module.GenerateStringDepartment();
-      else if (parameterRow.FillOption == Constants.Module.String.CompanyName)
+      else if (parameterRow.FillOption == Constants.Module.FillOptions.String.CompanyName)
         str = Functions.Module.GenerateStringCompanyName();
       
       return str;
@@ -444,14 +444,14 @@ namespace starkov.Faker.Server
     /// </summary>
     /// <param name="parameterRow">Строка с параметрами</param>
     /// <returns>Перечисление</returns>
-    public Enumeration? GetEnumByParameters(IParametersMatchingParameters parameterRow)
+    public virtual Enumeration? GetEnumByParameters(IParametersMatchingParameters parameterRow)
     {
       Enumeration? newEnum = null;
       var databook = parameterRow.ParametersMatching;
       
-      if (parameterRow.FillOption == Constants.Module.Common.FixedValue)
+      if (parameterRow.FillOption == Constants.Module.FillOptions.Common.FixedValue)
         newEnum = new Enumeration(parameterRow.ChosenValue);
-      else if (parameterRow.FillOption == Constants.Module.Common.RandomValue)
+      else if (parameterRow.FillOption == Constants.Module.FillOptions.Common.RandomValue)
       {
         var properties = Functions.Module.GetPropertiesType(databook.DatabookType?.DatabookTypeGuid ?? databook.DocumentType?.DocumentTypeGuid);
         var enumValues = properties.FirstOrDefault(_ => _.Name == parameterRow.PropertyName).EnumCollection;
@@ -466,15 +466,15 @@ namespace starkov.Faker.Server
     /// </summary>
     /// <param name="parameterRow">Строка с параметрами</param>
     /// <returns>Сущность</returns>
-    public IEntity GetEntityByParameters(IParametersMatchingParameters parameterRow)
+    public virtual IEntity GetEntityByParameters(IParametersMatchingParameters parameterRow)
     {
       int num;
       IEntity entity = null;
       var databook = parameterRow.ParametersMatching;
       
-      if (parameterRow.FillOption == Constants.Module.Common.FixedValue && int.TryParse(parameterRow.ChosenValue, out num))
+      if (parameterRow.FillOption == Constants.Module.FillOptions.Common.FixedValue && int.TryParse(parameterRow.ChosenValue, out num))
         entity = GetEntityByTypeGuidAndId(parameterRow.PropertyTypeGuid, num);
-      else if (parameterRow.FillOption == Constants.Module.Common.RandomValue)
+      else if (parameterRow.FillOption == Constants.Module.FillOptions.Common.RandomValue)
       {
         if (parameterRow.PropertyName == "Login" &&
             !string.IsNullOrEmpty(databook.DatabookType?.DatabookTypeGuid) &&
@@ -502,7 +502,7 @@ namespace starkov.Faker.Server
       var asyncHandler = Faker.AsyncHandlers.EntitiesGeneration.Create();
       asyncHandler.Count = count;
       asyncHandler.DatabookId = databookId;
-      asyncHandler.ExecuteAsync("Процесс по генерации сущностей завершил свою работу.\nБолее детальная информация отправлена в уведомлении.");
+      asyncHandler.ExecuteAsync(starkov.Faker.Resources.AsyncEndWorkMessage);
     }
     
     /// <summary>
@@ -531,7 +531,7 @@ namespace starkov.Faker.Server
     /// <param name="guid">Guid типа сущности</param>
     /// <returns>список с информацией о реквизитах типа сущности</returns>
     [Remote]
-    public static List<Structures.Module.PropertyInfo> GetPropertiesType(string guid)
+    public virtual List<Structures.Module.PropertyInfo> GetPropertiesType(string guid)
     {
       var propertiesList = new List<Structures.Module.PropertyInfo>();
       
@@ -553,7 +553,7 @@ namespace starkov.Faker.Server
         var additionalExcludeProps = Functions.Module.GetAdditionalExcludePropForLogins();
         properties = properties.Where(_ => !additionalExcludeProps.Contains(_.Name));
         
-        propertiesList.Add(Structures.Module.PropertyInfo.Create("Password",
+        propertiesList.Add(Structures.Module.PropertyInfo.Create(Constants.Module.PropertyNames.Password,
                                                                  "Пароль",
                                                                  Constants.Module.CustomType.String,
                                                                  string.Empty,
@@ -585,7 +585,7 @@ namespace starkov.Faker.Server
     /// </summary>
     /// <param name="typeGuid">Guid типа сущности</param>
     /// <returns>Список сущностей</returns>
-    [Remote]
+    [Remote(IsPure = true)]
     public virtual IQueryable<IEntity> GetEntitiesByTypeGuid(string typeGuid)
     {
       return GetEntitiesByTypeGuid(typeGuid, string.Empty);
@@ -597,7 +597,7 @@ namespace starkov.Faker.Server
     /// <param name="typeGuid">Guid типа сущности</param>
     /// <param name="documentTypeGuid">Guid типа документа</param>
     /// <returns>Список сущностей</returns>
-    [Remote]
+    [Remote(IsPure = true)]
     public virtual IQueryable<IEntity> GetEntitiesByTypeGuid(string typeGuid, string documentTypeGuid)
     {
       var entityType = Sungero.Domain.Shared.TypeExtension.GetTypeByGuid(Guid.Parse(typeGuid));
@@ -616,7 +616,7 @@ namespace starkov.Faker.Server
     /// <param name="typeGuid">Guid типа сущности</param>
     /// <param name="id">ИД сущности</param>
     /// <returns>Cущность</returns>
-    [Remote]
+    [Remote(IsPure = true, PackResultEntityEagerly = true)]
     public virtual IEntity GetEntityByTypeGuidAndId(string typeGuid, int id)
     {
       var entityType = Sungero.Domain.Shared.TypeExtension.GetTypeByGuid(Guid.Parse(typeGuid));
@@ -631,7 +631,7 @@ namespace starkov.Faker.Server
     /// </summary>
     /// <param name="typeGuid">Guid типа сущности</param>
     /// <returns>Сущность</returns>
-    [Remote]
+    [Remote(PackResultEntityEagerly = true)]
     public virtual IEntity CreateEntityByTypeGuid(string typeGuid)
     {
       var entityType = Sungero.Domain.Shared.TypeExtension.GetTypeByGuid(Guid.Parse(typeGuid));
@@ -645,7 +645,7 @@ namespace starkov.Faker.Server
     /// Получить список всех не использующихся учетных записей
     /// </summary>
     /// <returns>Список учетных записей</returns>
-    [Remote]
+    [Remote(IsPure = true)]
     public virtual IQueryable<ILogin> GetAllUnusedLogins()
     {
       var usedLoginsId = Sungero.Company.PublicFunctions.Employee.Remote.GetEmployees()

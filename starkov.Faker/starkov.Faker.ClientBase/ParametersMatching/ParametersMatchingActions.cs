@@ -20,7 +20,7 @@ namespace starkov.Faker.Client
     {
       var obj = e.RootEntity as IParametersMatching;
       if (obj.DatabookType == null && obj.DocumentType == null)
-        throw AppliedCodeException.Create("Для добавления данных заполните \"Тип справочника\" или \"Тип документа\"");
+        throw AppliedCodeException.Create(starkov.Faker.ParametersMatchings.Resources.ErrorToAddDataFillEntityType);
       
       e.Params.AddOrUpdate(Constants.ParametersMatching.ParamsForChangeCollection, true);
       Functions.ParametersMatching.ShowDialogForSelectParameters(obj, null);
@@ -36,7 +36,7 @@ namespace starkov.Faker.Client
     {
       var obj = e.RootEntity as IParametersMatching;
       if (obj.DatabookType == null && obj.DocumentType == null)
-        throw AppliedCodeException.Create("Для изменения данных заполните \"Тип справочника\" или \"Тип документа\"");
+        throw AppliedCodeException.Create(starkov.Faker.ParametersMatchings.Resources.ErrorToChangeDataFillEntityType);
       
       Functions.ParametersMatching.ShowDialogForChangeParameters(obj);
     }

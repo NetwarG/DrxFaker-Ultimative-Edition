@@ -16,6 +16,9 @@ namespace starkov.Faker.Server
   public class ModuleAsyncHandlers
   {
 
+    /// <summary>
+    /// Асинхронный обработчик для генерации сущностей
+    /// </summary>
     public virtual void EntitiesGeneration(starkov.Faker.Server.AsyncHandlerInvokeArgs.EntitiesGenerationInvokeArgs args)
     {
       Logger.ErrorFormat("Start async handler EntitiesGeneration");
@@ -32,9 +35,10 @@ namespace starkov.Faker.Server
       
       var attachments = new List<IEntity>();
       var errors = new List<string>();
+      var isNeedAddAttachment = true;
       var createdEntityCount = 0;
       var firstEntityId = 0;
-      var isNeedAddAttachment = true;
+      
       for (var i = 0; i < args.Count; i++)
       {
         using (Sungero.Domain.Session session = new Sungero.Domain.Session(true, false))
@@ -42,8 +46,8 @@ namespace starkov.Faker.Server
           #region Создание учетных записей
           if (databook.DatabookType?.DatabookTypeGuid == Constants.Module.Guids.Login)
           {
-            var login = Functions.Module.GetPropertyValueByParameters(databook.Parameters.FirstOrDefault(_ => _.PropertyName == "LoginName")) as string;
-            var password = databook.Parameters.FirstOrDefault(_ => _.PropertyName == "Password").ChosenValue;
+            var login = Functions.Module.GetPropertyValueByParameters(databook.Parameters.FirstOrDefault(_ => _.PropertyName == Constants.Module.PropertyNames.LoginName)) as string;
+            var password = databook.Parameters.FirstOrDefault(_ => _.PropertyName == Constants.Module.PropertyNames.Password).ChosenValue;
             Sungero.Company.PublicFunctions.Module.CreateLogin(login, password);
             createdEntityCount++;
             continue;
@@ -55,7 +59,7 @@ namespace starkov.Faker.Server
           var entityProperties = entity.GetType().GetProperties();
           
           #region Заполнение свойств сущности
-          foreach (var parametersRow in databook.Parameters.Where(_ => _.FillOption != Constants.Module.Common.NullValue))
+          foreach (var parametersRow in databook.Parameters.Where(_ => _.FillOption != Constants.Module.FillOptions.Common.NullValue))
           {
             try
             {

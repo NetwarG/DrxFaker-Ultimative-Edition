@@ -24,64 +24,64 @@ namespace starkov.Faker.Shared
         {
           Constants.Module.CustomType.Date, new List<string>()
           {
-            Constants.Module.Common.NullValue,
-            Constants.Module.Common.FixedValue,
-            Constants.Module.Date.Period
+            Constants.Module.FillOptions.Common.NullValue,
+            Constants.Module.FillOptions.Common.FixedValue,
+            Constants.Module.FillOptions.Date.Period
           }
         },
         {
           Constants.Module.CustomType.Bool, new List<string>()
           {
-            Constants.Module.Common.NullValue,
-            Constants.Module.Common.FixedValue,
-            Constants.Module.Common.RandomValue
+            Constants.Module.FillOptions.Common.NullValue,
+            Constants.Module.FillOptions.Common.FixedValue,
+            Constants.Module.FillOptions.Common.RandomValue
           }
         },
         {
           Constants.Module.CustomType.Numeric, new List<string>()
           {
-            Constants.Module.Common.NullValue,
-            Constants.Module.Common.FixedValue,
-            Constants.Module.Numeric.NumberRange,
-            Constants.Module.Numeric.NumberWithLength
+            Constants.Module.FillOptions.Common.NullValue,
+            Constants.Module.FillOptions.Common.FixedValue,
+            Constants.Module.FillOptions.Numeric.NumberRange,
+            Constants.Module.FillOptions.Numeric.NumberWithLength
           }
         },
         {
           Constants.Module.CustomType.String, new List<string>()
           {
-            Constants.Module.Common.NullValue,
-            Constants.Module.Common.FixedValue,
-            Constants.Module.String.RandomString,
-            Constants.Module.String.Paragraph,
-            Constants.Module.String.RandomPhone,
-            Constants.Module.String.NumberInStr,
-            Constants.Module.String.FirstName,
-            Constants.Module.String.LastName,
-            Constants.Module.String.FullName,
-            Constants.Module.String.JobTitle,
-            Constants.Module.String.Email,
-            Constants.Module.String.Login,
-            Constants.Module.String.State,
-            Constants.Module.String.City,
-            Constants.Module.String.Street,
-            Constants.Module.String.Department,
-            Constants.Module.String.CompanyName
+            Constants.Module.FillOptions.Common.NullValue,
+            Constants.Module.FillOptions.Common.FixedValue,
+            Constants.Module.FillOptions.String.RandomString,
+            Constants.Module.FillOptions.String.Paragraph,
+            Constants.Module.FillOptions.String.RandomPhone,
+            Constants.Module.FillOptions.String.NumberInStr,
+            Constants.Module.FillOptions.String.FirstName,
+            Constants.Module.FillOptions.String.LastName,
+            Constants.Module.FillOptions.String.FullName,
+            Constants.Module.FillOptions.String.JobTitle,
+            Constants.Module.FillOptions.String.Email,
+            Constants.Module.FillOptions.String.Login,
+            Constants.Module.FillOptions.String.State,
+            Constants.Module.FillOptions.String.City,
+            Constants.Module.FillOptions.String.Street,
+            Constants.Module.FillOptions.String.Department,
+            Constants.Module.FillOptions.String.CompanyName
           }
         },
         {
           Constants.Module.CustomType.Enumeration, new List<string>()
           {
-            Constants.Module.Common.NullValue,
-            Constants.Module.Common.FixedValue,
-            Constants.Module.Common.RandomValue
+            Constants.Module.FillOptions.Common.NullValue,
+            Constants.Module.FillOptions.Common.FixedValue,
+            Constants.Module.FillOptions.Common.RandomValue
           }
         },
         {
           Constants.Module.CustomType.Navigation, new List<string>()
           {
-            Constants.Module.Common.NullValue,
-            Constants.Module.Common.FixedValue,
-            Constants.Module.Common.RandomValue
+            Constants.Module.FillOptions.Common.NullValue,
+            Constants.Module.FillOptions.Common.FixedValue,
+            Constants.Module.FillOptions.Common.RandomValue
           }
         }
       };
