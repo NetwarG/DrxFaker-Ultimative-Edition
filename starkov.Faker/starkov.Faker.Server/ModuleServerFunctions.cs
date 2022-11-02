@@ -6,6 +6,7 @@ using Sungero.CoreEntities;
 using Sungero.Domain.Shared;
 using Sungero.Domain.SessionExtensions;
 using Bogus;
+using System.Text.RegularExpressions;
 
 namespace starkov.Faker.Server
 {
@@ -472,8 +473,20 @@ namespace starkov.Faker.Server
       IEntity entity = null;
       var databook = parameterRow.ParametersMatching;
       
-      if (parameterRow.FillOption == Constants.Module.FillOptions.Common.FixedValue && int.TryParse(parameterRow.ChosenValue, out num))
-        entity = GetEntityByTypeGuidAndId(parameterRow.PropertyTypeGuid, num);
+      if (parameterRow.FillOption == Constants.Module.FillOptions.Common.FixedValue)
+      {
+        var idInString = parameterRow.ChosenValue;
+        var regex = new Regex(@"\(\d*\)$");
+        var matches = regex.Matches(parameterRow.ChosenValue);
+        if (matches.Count > 0)
+        {
+          foreach (Match match in matches)
+            idInString = match.Value.Substring(1, match.Value.Length-2);
+        }
+        
+        if (int.TryParse(idInString, out num))
+          entity = GetEntityByTypeGuidAndId(parameterRow.PropertyTypeGuid, num);
+      }
       else if (parameterRow.FillOption == Constants.Module.FillOptions.Common.RandomValue)
       {
         if (parameterRow.PropertyName == "Login" &&

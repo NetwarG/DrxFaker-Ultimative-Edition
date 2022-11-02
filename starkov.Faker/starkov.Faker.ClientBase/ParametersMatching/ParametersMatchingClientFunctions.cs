@@ -310,10 +310,7 @@ namespace starkov.Faker.Client
       else if (customType == Constants.Module.CustomType.Numeric && int.TryParse(convertedValue, out num))
         result = num;
       else if (customType == Constants.Module.CustomType.Navigation)
-      {
-        var strWithId = string.Format(", Id: ({0})", convertedValue);
-        result = Functions.Module.GetEntitiyNamesByType(typeGuid, _obj.DocumentType?.DocumentTypeGuid).FirstOrDefault(_ => _.Contains(strWithId));
-      }
+        result = Functions.Module.GetEntitiyNamesByType(typeGuid, _obj.DocumentType?.DocumentTypeGuid).FirstOrDefault(_ => _ == convertedValue);
       else
         result = convertedValue;
       
@@ -333,19 +330,8 @@ namespace starkov.Faker.Client
       if (control == null)
         return result;
       
-      if (customType == Constants.Module.CustomType.Enumeration)
+      if (customType == Constants.Module.CustomType.Enumeration || customType == Constants.Module.CustomType.Navigation)
         result = (control as IDialogControl<string>).Value;
-      else if (customType == Constants.Module.CustomType.Navigation)
-      {
-        var dialogValue = (control as IDialogControl<string>).Value;
-        var regex = new Regex(@"\(\d*\)$");
-        var matches = regex.Matches(dialogValue);
-        if (matches.Count > 0)
-        {
-          foreach (Match match in matches)
-            result = match.Value.Substring(1, match.Value.Length-2);
-        }
-      }
       else if (control is IDateDialogValue)
         result = (control as IDateDialogValue).Value.GetValueOrDefault().ToShortDateString();
       else if (control is IBooleanDialogValue)
