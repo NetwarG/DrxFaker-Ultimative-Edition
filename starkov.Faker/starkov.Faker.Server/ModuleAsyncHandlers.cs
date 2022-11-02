@@ -7,7 +7,6 @@ using Bogus;
 using PdfSharp.Pdf;
 using Sungero.Domain.Shared;
 using System.IO;
-
 using System.Diagnostics;
 using System.Threading;
 
@@ -81,7 +80,7 @@ namespace starkov.Faker.Server
             }
             catch (Exception ex)
             {
-              var err = string.Format("Ошибка вызванная занесением значения в свойство {0}:\n- {1}", parametersRow.PropertyName, ex.Message);
+              var err = starkov.Faker.Resources.ErrorText_SetValToPropertyFormat(parametersRow.PropertyName, ex.Message);
               if (!errors.Contains(err))
                 errors.Add(err);
               
@@ -161,15 +160,15 @@ namespace starkov.Faker.Server
       
       #region Отправка уведомления администраторам
       var administrators = Roles.Administrators.RecipientLinks.Select(_ => _.Member);
-      var task = Sungero.Workflow.SimpleTasks.CreateWithNotices(string.Format("Создано {0} из {1} сущностей типа {2}", createdEntityCount, args.Count, databook.Name),
+      var task = Sungero.Workflow.SimpleTasks.CreateWithNotices(starkov.Faker.Resources.NoticeSubjectFormat(createdEntityCount, args.Count, databook.Name),
                                                                 administrators.ToArray());
       
       var text = string.Empty;
       if (firstEntityId != 0)
-        text += string.Format("ИД первой записи: {0}", firstEntityId);
-      text += string.Format("{0}Время затраченное на создание сущностей: {1}", string.IsNullOrEmpty(text) ? string.Empty : "\n", elapsedTime);
+        text += starkov.Faker.Resources.InfoText_FirstEntryIDFormat(firstEntityId);
+      text += starkov.Faker.Resources.InfoText_TimeSpentToCreatEntitiesFormat(string.IsNullOrEmpty(text) ? string.Empty : "\n", elapsedTime);
       if (errors.Any())
-        text += string.Format("\n\tОшибки:\n{0}", string.Join("\n", errors));
+        text += starkov.Faker.Resources.InfoText_ErrorsFormat(string.Join("\n", errors));
       
       foreach (var attachment in attachments)
         task.Attachments.Add(attachment);

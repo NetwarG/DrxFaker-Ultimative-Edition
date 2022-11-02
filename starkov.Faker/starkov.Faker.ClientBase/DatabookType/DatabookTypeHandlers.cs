@@ -11,6 +11,11 @@ namespace starkov.Faker
   partial class DatabookTypeClientHandlers
   {
 
+    public override void Refresh(Sungero.Presentation.FormRefreshEventArgs e)
+    {
+      _obj.State.Properties.Name.IsEnabled = !string.IsNullOrEmpty(_obj.DatabookTypeGuid);
+    }
+
     public virtual void DatabookTypeGuidValueInput(Sungero.Presentation.StringValueInputEventArgs e)
     {
       var guid = Guid.Empty;
