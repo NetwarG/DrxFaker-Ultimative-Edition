@@ -26,6 +26,12 @@ namespace starkov.Faker.Client
       var countField = dialog.AddInteger(starkov.Faker.Resources.DialogFieldEntityCreateCount, true);
       #endregion
       
+      dialog.SetOnRefresh((arg) =>
+                          {
+                            if (countField.Value.HasValue && countField.Value <= 0)
+                              arg.AddError(starkov.Faker.Resources.DialogError_RecordCountLessThanOne);
+                          });
+      
       if (dialog.Show() == DialogButtons.Ok)
       {
         Functions.Module.Remote.CreateAsyncForGenerateEntities(countField.Value.GetValueOrDefault(), entityField.Value.Id);

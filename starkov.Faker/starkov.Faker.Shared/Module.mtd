@@ -150,7 +150,14 @@
     "DialogFieldEntityToFill",
     "DialogFieldEntityCreateCount",
     "MessageEntityGenerationProcessStarted",
-    "AsyncEndWorkMessage"
+    "AsyncEndWorkMessage",
+    "LocalizedPassword",
+    "ErrorText_SetValToProperty",
+    "InfoText_FirstEntryID",
+    "InfoText_TimeSpentToCreatEntities",
+    "InfoText_Errors",
+    "NoticeSubject",
+    "DialogError_RecordCountLessThanOne"
   ],
   "ServerAssemblyName": "starkov.Faker.Server",
   "ServerNamespace": "starkov.Faker.Server",

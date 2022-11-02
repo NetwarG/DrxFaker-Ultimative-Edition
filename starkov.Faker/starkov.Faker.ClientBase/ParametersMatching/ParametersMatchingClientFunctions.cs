@@ -264,7 +264,8 @@ namespace starkov.Faker.Client
                selectedValue == Constants.Module.FillOptions.String.FullName)
       {
         personalValuesField.AddRange(new List<IDropDownDialogValue>() {
-                                       dialog.AddSelect(starkov.Faker.ParametersMatchings.Resources.DialogFieldSex, false).From(Enum.GetNames(typeof(Bogus.DataSets.Name.Gender)))
+                                       dialog.AddSelect(starkov.Faker.ParametersMatchings.Resources.DialogFieldSex, false)
+                                         .From(Enum.GetNames(typeof(Bogus.DataSets.Name.Gender)))
                                      });
       }
     }

@@ -58,6 +58,9 @@
       ]
     }
   ],
+  "HandledEvents": [
+    "RefreshClient"
+  ],
   "IconResourcesKeys": [],
   "OperationsClass": "",
   "Properties": [

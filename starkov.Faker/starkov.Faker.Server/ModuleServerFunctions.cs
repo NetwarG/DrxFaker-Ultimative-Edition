@@ -567,7 +567,7 @@ namespace starkov.Faker.Server
         properties = properties.Where(_ => !additionalExcludeProps.Contains(_.Name));
         
         propertiesList.Add(Structures.Module.PropertyInfo.Create(Constants.Module.PropertyNames.Password,
-                                                                 "Пароль",
+                                                                 starkov.Faker.Resources.LocalizedPassword,
                                                                  Constants.Module.CustomType.String,
                                                                  string.Empty,
                                                                  true,

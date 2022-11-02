@@ -21,69 +21,12 @@ namespace starkov.Faker.Shared
       #region Словарь
       var dict = new Dictionary<string, List<string>>()
       {
-        {
-          Constants.Module.CustomType.Date, new List<string>()
-          {
-            Constants.Module.FillOptions.Common.NullValue,
-            Constants.Module.FillOptions.Common.FixedValue,
-            Constants.Module.FillOptions.Date.Period
-          }
-        },
-        {
-          Constants.Module.CustomType.Bool, new List<string>()
-          {
-            Constants.Module.FillOptions.Common.NullValue,
-            Constants.Module.FillOptions.Common.FixedValue,
-            Constants.Module.FillOptions.Common.RandomValue
-          }
-        },
-        {
-          Constants.Module.CustomType.Numeric, new List<string>()
-          {
-            Constants.Module.FillOptions.Common.NullValue,
-            Constants.Module.FillOptions.Common.FixedValue,
-            Constants.Module.FillOptions.Numeric.NumberRange,
-            Constants.Module.FillOptions.Numeric.NumberWithLength
-          }
-        },
-        {
-          Constants.Module.CustomType.String, new List<string>()
-          {
-            Constants.Module.FillOptions.Common.NullValue,
-            Constants.Module.FillOptions.Common.FixedValue,
-            Constants.Module.FillOptions.String.RandomString,
-            Constants.Module.FillOptions.String.Paragraph,
-            Constants.Module.FillOptions.String.RandomPhone,
-            Constants.Module.FillOptions.String.NumberInStr,
-            Constants.Module.FillOptions.String.FirstName,
-            Constants.Module.FillOptions.String.LastName,
-            Constants.Module.FillOptions.String.FullName,
-            Constants.Module.FillOptions.String.JobTitle,
-            Constants.Module.FillOptions.String.Email,
-            Constants.Module.FillOptions.String.Login,
-            Constants.Module.FillOptions.String.State,
-            Constants.Module.FillOptions.String.City,
-            Constants.Module.FillOptions.String.Street,
-            Constants.Module.FillOptions.String.Department,
-            Constants.Module.FillOptions.String.CompanyName
-          }
-        },
-        {
-          Constants.Module.CustomType.Enumeration, new List<string>()
-          {
-            Constants.Module.FillOptions.Common.NullValue,
-            Constants.Module.FillOptions.Common.FixedValue,
-            Constants.Module.FillOptions.Common.RandomValue
-          }
-        },
-        {
-          Constants.Module.CustomType.Navigation, new List<string>()
-          {
-            Constants.Module.FillOptions.Common.NullValue,
-            Constants.Module.FillOptions.Common.FixedValue,
-            Constants.Module.FillOptions.Common.RandomValue
-          }
-        }
+        { Constants.Module.CustomType.Date, Functions.Module.GetFillOptionForDate() },
+        { Constants.Module.CustomType.Bool, Functions.Module.GetFillOptionForBool() },
+        { Constants.Module.CustomType.Numeric, Functions.Module.GetFillOptionForNumeric() },
+        { Constants.Module.CustomType.String, Functions.Module.GetFillOptionForString() },
+        { Constants.Module.CustomType.Enumeration, Functions.Module.GetFillOptionForEnumeration() },
+        { Constants.Module.CustomType.Navigation, Functions.Module.GetFillOptionForNavigation() }
       };
       #endregion
       
