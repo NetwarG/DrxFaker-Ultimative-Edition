@@ -454,7 +454,13 @@ namespace starkov.Faker.Server
         newEnum = new Enumeration(parameterRow.ChosenValue);
       else if (parameterRow.FillOption == Constants.Module.FillOptions.Common.RandomValue)
       {
-        var properties = Functions.Module.GetPropertiesType(databook.DatabookType?.DatabookTypeGuid ?? databook.DocumentType?.DocumentTypeGuid);
+        var guid = string.Empty;
+        if (databook.DatabookType != null)
+          guid = databook.DatabookType.DatabookTypeGuid;
+        else if (databook.DocumentType != null)
+          guid = databook.DocumentType.DocumentTypeGuid;
+          
+        var properties = Functions.Module.GetPropertiesType(guid);
         var enumValues = properties.FirstOrDefault(_ => _.Name == parameterRow.PropertyName).EnumCollection;
         newEnum = Functions.Module.PickRandomEnumeration(enumValues);
       }
@@ -490,11 +496,12 @@ namespace starkov.Faker.Server
       else if (parameterRow.FillOption == Constants.Module.FillOptions.Common.RandomValue)
       {
         if (parameterRow.PropertyName == "Login" &&
-            !string.IsNullOrEmpty(databook.DatabookType?.DatabookTypeGuid) &&
+            databook.DatabookType != null &&
+            !string.IsNullOrEmpty(databook.DatabookType.DatabookTypeGuid) &&
             Equals(TypeExtension.GetTypeByGuid(Guid.Parse(databook.DatabookType.DatabookTypeGuid)), typeof(Sungero.Company.IEmployee)))
           entity = PickRandomLogin();
         else
-          entity = PickRandomEntity(parameterRow.PropertyTypeGuid, databook.DocumentType?.DocumentTypeGuid);
+          entity = PickRandomEntity(parameterRow.PropertyTypeGuid, databook.DocumentType != null ? databook.DocumentType.DocumentTypeGuid : null);
       }
       
       return entity;
@@ -503,6 +510,47 @@ namespace starkov.Faker.Server
     #endregion
     
     #region Общие функции
+    
+    /// <summary>
+    /// Создать логин.
+    /// </summary>
+    /// <param name="loginName">Логин.</param>
+    /// <param name="password">Пароль.</param>
+    [Public]
+    public virtual void CreateLogin(string loginName, string password)
+    {
+      var login = Logins.Create();
+      login.LoginName = loginName;
+      login.TypeAuthentication = Sungero.CoreEntities.Login.TypeAuthentication.Password;
+      var credentials = this.GetCredentials(password).Split(new string[] { "|" }, StringSplitOptions.None);
+      Sungero.Domain.Shared.RemoteFunctionExecutor.Execute(Guid.Parse("55f542e9-4645-4f8d-999e-73cc71df62fd"), "SetLoginPassword", login, credentials[0], credentials[1]);
+    }
+    
+    /// <summary>
+    /// Получить реквизиты для входа по паролю.
+    /// </summary>
+    /// <param name="password">Пароль.</param>
+    /// <returns>Реквизиты для входа.</returns>
+    private string GetCredentials(string password)
+    {
+      var salt = CommonLibrary.Hashing.PasswordHashManager.Instance.GenerateSalt();
+      var passwordHash = CommonLibrary.Hashing.PasswordHashManager.Instance.GenerateHash(CommonLibrary.StringUtils.ToSecureString(password));
+      passwordHash = CommonLibrary.Hashing.PasswordHashManager.Instance.AddSaltToHash(passwordHash, salt);
+      var passwordHashString = System.Convert.ToBase64String(passwordHash);
+      var saltString = System.Convert.ToBase64String(salt);
+      
+      return string.Join("|", passwordHashString, saltString);
+    }
+    
+    /// <summary>
+    /// Вернуть всех сотрудников.
+    /// </summary>
+    /// <returns>Все сотрудники.</returns>
+    [Public, Remote(IsPure = true)]
+    public static IQueryable<Sungero.Company.IEmployee> GetEmployees()
+    {
+      return Sungero.Company.Employees.GetAll();
+    }
     
     /// <summary>
     /// Запустить АО для генерации сущностей
@@ -515,7 +563,7 @@ namespace starkov.Faker.Server
       var asyncHandler = Faker.AsyncHandlers.EntitiesGeneration.Create();
       asyncHandler.Count = count;
       asyncHandler.DatabookId = databookId;
-      asyncHandler.ExecuteAsync(starkov.Faker.Resources.AsyncEndWorkMessage);
+      asyncHandler.ExecuteAsync();
     }
     
     /// <summary>
@@ -578,12 +626,24 @@ namespace starkov.Faker.Server
       foreach (var propertyMetadata in properties)
       {
         propertiesList.Add(Structures.Module.PropertyInfo.Create(propertyMetadata.Name,
+                                                                 
                                                                  propertyMetadata.GetLocalizedName().ToString(),
+                                                                 
                                                                  propertyMetadata.PropertyType.ToString(),
-                                                                 (propertyMetadata as Sungero.Metadata.NavigationPropertyMetadata)?.EntityGuid.ToString() ?? string.Empty,
+                                                                 
+                                                                 propertyMetadata is Sungero.Metadata.NavigationPropertyMetadata ? 
+                                                                 (propertyMetadata as Sungero.Metadata.NavigationPropertyMetadata).EntityGuid.ToString() : 
+                                                                 string.Empty,
+                                                                 
                                                                  propertyMetadata.IsRequired,
-                                                                 (propertyMetadata as Sungero.Metadata.EnumPropertyMetadata)?.Values.Select(_ => _.Name).ToList() ?? new List<string>(),
-                                                                 (propertyMetadata as Sungero.Metadata.StringPropertyMetadata)?.Length));
+                                                                 
+                                                                 propertyMetadata is Sungero.Metadata.EnumPropertyMetadata ?
+                                                                 (propertyMetadata as Sungero.Metadata.EnumPropertyMetadata).Values.Select(_ => _.Name).ToList() : 
+                                                                 new List<string>(),
+                                                                 
+                                                                 propertyMetadata is Sungero.Metadata.StringPropertyMetadata ?
+                                                                 (propertyMetadata as Sungero.Metadata.StringPropertyMetadata).Length as int? :
+                                                                 null));
       }
       
       return propertiesList;
@@ -661,7 +721,7 @@ namespace starkov.Faker.Server
     [Remote(IsPure = true)]
     public virtual IQueryable<ILogin> GetAllUnusedLogins()
     {
-      var usedLoginsId = Sungero.Company.PublicFunctions.Employee.Remote.GetEmployees()
+      var usedLoginsId = PublicFunctions.Module.Remote.GetEmployees()
         .Where(_ => _.Login != null)
         .Select(_ => _.Login.Id);
       var systemLogins = new List<string>() { "Administrator", "Integration Service", "Service User", "Adviser" };
