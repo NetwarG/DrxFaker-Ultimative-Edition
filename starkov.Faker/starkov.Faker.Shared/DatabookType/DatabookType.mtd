@@ -58,6 +58,9 @@
       ]
     }
   ],
+  "HandledEvents": [
+    "RefreshClient"
+  ],
   "IconResourcesKeys": [],
   "OperationsClass": "",
   "Properties": [
@@ -114,7 +117,7 @@
   "Versions": [
     {
       "Type": "EntityMetadata",
-      "Number": 11
+      "Number": 9
     }
   ]
 }

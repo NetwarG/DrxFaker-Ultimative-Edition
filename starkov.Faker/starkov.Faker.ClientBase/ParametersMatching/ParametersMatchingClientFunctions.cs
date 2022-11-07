@@ -30,7 +30,11 @@ namespace starkov.Faker.Client
       propertyNameField.SetOnValueChanged((arg) =>
                                           {
                                             if (!string.IsNullOrEmpty(arg.NewValue))
-                                              localizedValuesField.Value = _obj.Parameters.FirstOrDefault(_ => _.PropertyName == arg.NewValue)?.LocalizedPropertyName;
+                                            {
+                                              var row = _obj.Parameters.FirstOrDefault(_ => _.PropertyName == arg.NewValue);
+                                              if (row != null)
+                                                localizedValuesField.Value = row.LocalizedPropertyName;
+                                            }
                                           });
       #endregion
       
@@ -39,7 +43,10 @@ namespace starkov.Faker.Client
       dialog.Buttons.AddCancel();
       
       if (dialog.Show() == changeBtn)
-        ShowDialogForSelectParameters(_obj.Parameters.FirstOrDefault(_ => _.PropertyName == propertyNameField.Value)?.Id);
+      {
+        var row = _obj.Parameters.FirstOrDefault(_ => _.PropertyName == propertyNameField.Value);
+        ShowDialogForSelectParameters(row.Id);
+      }
       #endregion
     }
 
@@ -53,7 +60,13 @@ namespace starkov.Faker.Client
       
       #region Данные для диалога
       var parameterRow = _obj.Parameters.FirstOrDefault(_ => _.Id == rowId.GetValueOrDefault());
-      var propInfo = Functions.Module.Remote.GetPropertiesType(_obj.DatabookType?.DatabookTypeGuid ?? _obj.DocumentType?.DocumentTypeGuid)
+      var guid = string.Empty;
+      if (_obj.DatabookType != null)
+        guid = _obj.DatabookType.DatabookTypeGuid;
+      else if (_obj.DocumentType != null)
+        guid = _obj.DocumentType.DocumentTypeGuid;
+      
+      var propInfo = Functions.Module.Remote.GetPropertiesType(guid)
         .Where(_ => rowId.HasValue ?
                parameterRow.PropertyName == _.Name :
                !_obj.Parameters.Select(p => p.PropertyName).Contains(_.Name));
@@ -215,10 +228,10 @@ namespace starkov.Faker.Client
     /// <param name="selectedValue">Выбранное значение</param>
     /// <param name="selectedPropInfo">Структура с информацией о свойстве</param>
     /// <param name="personalValuesField">Список контролов</param>
-    public virtual void ShowDialogControlsByParameter(CommonLibrary.IInputDialog dialog,
-                                                      string selectedValue,
-                                                      Faker.Structures.Module.PropertyInfo selectedPropInfo,
-                                                      ref List<object> personalValuesField)
+    private void ShowDialogControlsByParameter(CommonLibrary.IInputDialog dialog,
+                                               string selectedValue,
+                                               Faker.Structures.Module.PropertyInfo selectedPropInfo,
+                                               ref List<object> personalValuesField)
     {
       if (selectedValue == Constants.Module.FillOptions.Common.FixedValue)
       {
@@ -237,7 +250,7 @@ namespace starkov.Faker.Client
         else
           personalValuesField.Add(dialog.AddSelect(starkov.Faker.ParametersMatchings.Resources.DialogFieldValue, true)
                                   .From(Functions.Module.GetEntitiyNamesByType(selectedPropInfo.PropertyGuid,
-                                                                               _obj.DocumentType?.DocumentTypeGuid).ToArray()));
+                                                                               _obj.DocumentType != null ? _obj.DocumentType.DocumentTypeGuid : null).ToArray()));
       }
       else if (selectedValue == Constants.Module.FillOptions.Date.Period)
       {
@@ -264,7 +277,8 @@ namespace starkov.Faker.Client
                selectedValue == Constants.Module.FillOptions.String.FullName)
       {
         personalValuesField.AddRange(new List<IDropDownDialogValue>() {
-                                       dialog.AddSelect(starkov.Faker.ParametersMatchings.Resources.DialogFieldSex, false).From(Enum.GetNames(typeof(Bogus.DataSets.Name.Gender)))
+                                       dialog.AddSelect(starkov.Faker.ParametersMatchings.Resources.DialogFieldSex, false)
+                                         .From(Enum.GetNames(typeof(Bogus.DataSets.Name.Gender)))
                                      });
       }
     }
@@ -274,7 +288,7 @@ namespace starkov.Faker.Client
     /// </summary>
     /// <param name="parameterRow">Строка с параметрами</param>
     /// <param name="controls">Контролы</param>
-    public virtual void FillDialogControlFromTable(Faker.IParametersMatchingParameters parameterRow, ref List<object> controls)
+    private void FillDialogControlFromTable(Faker.IParametersMatchingParameters parameterRow, ref List<object> controls)
     {
       if (!string.IsNullOrEmpty(parameterRow.ChosenValue))
       {
@@ -310,10 +324,9 @@ namespace starkov.Faker.Client
       else if (customType == Constants.Module.CustomType.Numeric && int.TryParse(convertedValue, out num))
         result = num;
       else if (customType == Constants.Module.CustomType.Navigation)
-      {
-        var strWithId = string.Format(", Id: ({0})", convertedValue);
-        result = Functions.Module.GetEntitiyNamesByType(typeGuid, _obj.DocumentType?.DocumentTypeGuid).FirstOrDefault(_ => _.Contains(strWithId));
-      }
+        result = Functions.Module.GetEntitiyNamesByType(typeGuid, 
+                                                        _obj.DocumentType != null ? _obj.DocumentType.DocumentTypeGuid : null)
+          .FirstOrDefault(_ => _ == convertedValue);
       else
         result = convertedValue;
       
@@ -333,19 +346,8 @@ namespace starkov.Faker.Client
       if (control == null)
         return result;
       
-      if (customType == Constants.Module.CustomType.Enumeration)
+      if (customType == Constants.Module.CustomType.Enumeration || customType == Constants.Module.CustomType.Navigation)
         result = (control as IDialogControl<string>).Value;
-      else if (customType == Constants.Module.CustomType.Navigation)
-      {
-        var dialogValue = (control as IDialogControl<string>).Value;
-        var regex = new Regex(@"\(\d*\)$");
-        var matches = regex.Matches(dialogValue);
-        if (matches.Count > 0)
-        {
-          foreach (Match match in matches)
-            result = match.Value.Substring(1, match.Value.Length-2);
-        }
-      }
       else if (control is IDateDialogValue)
         result = (control as IDateDialogValue).Value.GetValueOrDefault().ToShortDateString();
       else if (control is IBooleanDialogValue)
