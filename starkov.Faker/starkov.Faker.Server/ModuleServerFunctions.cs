@@ -536,16 +536,6 @@ namespace starkov.Faker.Server
     }
     
     /// <summary>
-    /// Вернуть всех сотрудников.
-    /// </summary>
-    /// <returns>Все сотрудники.</returns>
-    [Public, Remote(IsPure = true)]
-    public static IQueryable<Sungero.Company.IEmployee> GetEmployees()
-    {
-      return Sungero.Company.Employees.GetAll();
-    }
-    
-    /// <summary>
     /// Запустить АО для генерации сущностей
     /// </summary>
     /// <param name="count">Кол-во создаваемых записей</param>
@@ -702,7 +692,7 @@ namespace starkov.Faker.Server
     [Remote(IsPure = true)]
     public virtual IQueryable<ILogin> GetAllUnusedLogins()
     {
-      var usedLoginsId = PublicFunctions.Module.Remote.GetEmployees()
+      var usedLoginsId = Sungero.Company.PublicFunctions.Employee.Remote.GetEmployees()
         .Where(_ => _.Login != null)
         .Select(_ => _.Login.Id);
       var systemLogins = new List<string>() { "Administrator", "Integration Service", "Service User", "Adviser" };
