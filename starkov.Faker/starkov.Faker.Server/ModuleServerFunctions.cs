@@ -454,13 +454,7 @@ namespace starkov.Faker.Server
         newEnum = new Enumeration(parameterRow.ChosenValue);
       else if (parameterRow.FillOption == Constants.Module.FillOptions.Common.RandomValue)
       {
-        var guid = string.Empty;
-        if (databook.DatabookType != null)
-          guid = databook.DatabookType.DatabookTypeGuid;
-        else if (databook.DocumentType != null)
-          guid = databook.DocumentType.DocumentTypeGuid;
-          
-        var properties = Functions.Module.GetPropertiesType(guid);
+        var properties = Functions.Module.GetPropertiesType(databook.DatabookType?.DatabookTypeGuid ?? databook.DocumentType?.DocumentTypeGuid);
         var enumValues = properties.FirstOrDefault(_ => _.Name == parameterRow.PropertyName).EnumCollection;
         newEnum = Functions.Module.PickRandomEnumeration(enumValues);
       }
@@ -496,12 +490,11 @@ namespace starkov.Faker.Server
       else if (parameterRow.FillOption == Constants.Module.FillOptions.Common.RandomValue)
       {
         if (parameterRow.PropertyName == "Login" &&
-            databook.DatabookType != null &&
-            !string.IsNullOrEmpty(databook.DatabookType.DatabookTypeGuid) &&
+            !string.IsNullOrEmpty(databook.DatabookType?.DatabookTypeGuid) &&
             Equals(TypeExtension.GetTypeByGuid(Guid.Parse(databook.DatabookType.DatabookTypeGuid)), typeof(Sungero.Company.IEmployee)))
           entity = PickRandomLogin();
         else
-          entity = PickRandomEntity(parameterRow.PropertyTypeGuid, databook.DocumentType != null ? databook.DocumentType.DocumentTypeGuid : null);
+          entity = PickRandomEntity(parameterRow.PropertyTypeGuid, databook.DocumentType?.DocumentTypeGuid);
       }
       
       return entity;
@@ -626,24 +619,12 @@ namespace starkov.Faker.Server
       foreach (var propertyMetadata in properties)
       {
         propertiesList.Add(Structures.Module.PropertyInfo.Create(propertyMetadata.Name,
-                                                                 
                                                                  propertyMetadata.GetLocalizedName().ToString(),
-                                                                 
                                                                  propertyMetadata.PropertyType.ToString(),
-                                                                 
-                                                                 propertyMetadata is Sungero.Metadata.NavigationPropertyMetadata ? 
-                                                                 (propertyMetadata as Sungero.Metadata.NavigationPropertyMetadata).EntityGuid.ToString() : 
-                                                                 string.Empty,
-                                                                 
+                                                                 (propertyMetadata as Sungero.Metadata.NavigationPropertyMetadata)?.EntityGuid.ToString() ?? string.Empty,
                                                                  propertyMetadata.IsRequired,
-                                                                 
-                                                                 propertyMetadata is Sungero.Metadata.EnumPropertyMetadata ?
-                                                                 (propertyMetadata as Sungero.Metadata.EnumPropertyMetadata).Values.Select(_ => _.Name).ToList() : 
-                                                                 new List<string>(),
-                                                                 
-                                                                 propertyMetadata is Sungero.Metadata.StringPropertyMetadata ?
-                                                                 (propertyMetadata as Sungero.Metadata.StringPropertyMetadata).Length as int? :
-                                                                 null));
+                                                                 (propertyMetadata as Sungero.Metadata.EnumPropertyMetadata)?.Values.Select(_ => _.Name).ToList() ?? new List<string>(),
+                                                                 (propertyMetadata as Sungero.Metadata.StringPropertyMetadata)?.Length));
       }
       
       return propertiesList;

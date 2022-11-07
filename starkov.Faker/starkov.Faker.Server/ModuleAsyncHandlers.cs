@@ -43,7 +43,7 @@ namespace starkov.Faker.Server
         using (Sungero.Domain.Session session = new Sungero.Domain.Session(true, false))
         {
           #region Создание учетных записей
-          if (databook.DatabookType != null && databook.DatabookType.DatabookTypeGuid == Constants.Module.Guids.Login)
+          if (databook.DatabookType?.DatabookTypeGuid == Constants.Module.Guids.Login)
           {
             var login = Functions.Module.GetPropertyValueByParameters(databook.Parameters.FirstOrDefault(_ => _.PropertyName == Constants.Module.PropertyNames.LoginName)) as string;
             var password = databook.Parameters.FirstOrDefault(_ => _.PropertyName == Constants.Module.PropertyNames.Password).ChosenValue;
@@ -53,13 +53,7 @@ namespace starkov.Faker.Server
           }
           #endregion
           
-          var guid = string.Empty;
-          if (databook.DatabookType != null)
-            guid = databook.DatabookType.DatabookTypeGuid;
-          else if (databook.DocumentType != null)
-            guid = databook.DocumentType.DocumentTypeGuid;
-      
-          var finalTypeGuid = Functions.Module.GetFinalTypeGuidByAncestor(guid);
+          var finalTypeGuid = Functions.Module.GetFinalTypeGuidByAncestor(databook.DatabookType?.DatabookTypeGuid ?? databook.DocumentType?.DocumentTypeGuid);
           var entity = Functions.Module.CreateEntityByTypeGuid(finalTypeGuid);
           var entityProperties = entity.GetType().GetProperties();
           
