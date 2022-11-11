@@ -62,13 +62,12 @@ namespace starkov.Faker.Server
             }
             #endregion
             
-          var guid = string.Empty;
-          if (databook.DatabookType != null)
-            guid = databook.DatabookType.DatabookTypeGuid;
-          else if (databook.DocumentType != null)
-            guid = databook.DocumentType.DocumentTypeGuid;
-      
-          var finalTypeGuid = Functions.Module.GetFinalTypeGuidByAncestor(guid);
+            var finalTypeGuid = string.Empty;
+            if (databook.DatabookType != null)
+              finalTypeGuid = databook.DatabookType.DatabookTypeGuid;
+            else if (databook.DocumentType != null)
+              finalTypeGuid = databook.DocumentType.DocumentTypeGuid;
+            
             var entity = Functions.Module.CreateEntityByTypeGuid(finalTypeGuid);
             var entityProperties = entity.GetType().GetProperties();
             
