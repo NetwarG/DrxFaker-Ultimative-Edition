@@ -75,11 +75,9 @@ namespace starkov.Faker.Client
       dialog.Buttons.AddCancel();
       
       if (dialog.Show() == changeBtn)
-      {
         ShowDialogForSelectParameters(_obj.Parameters.FirstOrDefault(_ => isUnique ?
                                                                      _.LocalizedPropertyName == localizedValuesField.Value :
                                                                      _.PropertyName == propertyNameField.Value).Id);
-      }
       #endregion
     }
 
@@ -92,7 +90,7 @@ namespace starkov.Faker.Client
       var dialog = Dialogs.CreateInputDialog(starkov.Faker.ParametersMatchings.Resources.DialogDataInput);
       
       #region Данные для диалога
-      var parameterRow = _obj.Parameters.FirstOrDefault(_ => _.Id == rowId.GetValueOrDefault());
+      var parameterRow = _obj.Parameters.FirstOrDefault(_ => _.Id == rowId.GetValueOrDefault());      
       var guid = string.Empty;
       if (_obj.DatabookType != null)
         guid = _obj.DatabookType.DatabookTypeGuid;
@@ -103,6 +101,12 @@ namespace starkov.Faker.Client
         .Where(_ => rowId.HasValue ?
                parameterRow.PropertyName == _.Name :
                !_obj.Parameters.Select(p => p.PropertyName).Contains(_.Name));
+      
+      if (!propInfo.Any())
+      {
+        Dialogs.ShowMessage(starkov.Faker.ParametersMatchings.Resources.DialogErrorNoPropertyFormat(parameterRow.LocalizedPropertyName), MessageType.Error);
+        return;
+      }
       #endregion
       
       #region Поля диалога
