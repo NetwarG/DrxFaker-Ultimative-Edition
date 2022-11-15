@@ -20,7 +20,13 @@ namespace starkov.Faker.Client
       var dialog = Dialogs.CreateInputDialog(starkov.Faker.ParametersMatchings.Resources.DialogChangeData);
       
       #region Данные для диалога
-      var propInfo = Functions.Module.Remote.GetPropertiesType(_obj.DatabookType?.DatabookTypeGuid ?? _obj.DocumentType?.DocumentTypeGuid);
+      var guid = string.Empty;
+      if (_obj.DatabookType != null)
+        guid = _obj.DatabookType.DatabookTypeGuid;
+      else if (_obj.DocumentType != null)
+        guid = _obj.DocumentType.DocumentTypeGuid;
+      
+      var propInfo = Functions.Module.Remote.GetPropertiesType(guid);
       #endregion
       
       #region Поля диалога

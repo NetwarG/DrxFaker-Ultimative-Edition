@@ -29,7 +29,12 @@ namespace starkov.Faker.Server
         Logger.DebugFormat("EntitiesGeneration error: No ParametersMatching databooks with id {0}", args.DatabookId);
         return;
       }
-      var propertiesStructure = Functions.Module.GetPropertiesType(databook.DatabookType?.DatabookTypeGuid ?? databook.DocumentType?.DocumentTypeGuid);
+      var guid = string.Empty;
+      if (databook.DatabookType != null)
+        guid = databook.DatabookType.DatabookTypeGuid;
+      else if (databook.DocumentType != null)
+        guid = databook.DocumentType.DocumentTypeGuid;
+      var propertiesStructure = Functions.Module.GetPropertiesType(guid);
       
       var stopWatch = new Stopwatch();
       stopWatch.Start();
