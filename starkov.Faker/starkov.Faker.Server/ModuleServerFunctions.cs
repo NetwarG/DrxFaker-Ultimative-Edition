@@ -317,7 +317,7 @@ namespace starkov.Faker.Server
     /// </summary>
     /// <param name="parameterRow">Строка с параметрами</param>
     /// <returns>Значение свойства</returns>
-    public virtual object GetPropertyValueByParameters(IParametersMatchingParameters parameterRow)
+    public virtual object GetPropertyValueByParameters(IParametersMatchingParameters parameterRow, List<starkov.Faker.Structures.Module.PropertyInfo> propertiesInfo)
     {
       object result = null;
       if (parameterRow == null)
@@ -332,7 +332,7 @@ namespace starkov.Faker.Server
       else if (parameterRow.PropertyType == Constants.Module.CustomType.String)
         result = GetStringByParameters(parameterRow);
       else if (parameterRow.PropertyType == Constants.Module.CustomType.Enumeration)
-        result = GetEnumByParameters(parameterRow);
+        result = GetEnumByParameters(parameterRow, propertiesInfo);
       else if (parameterRow.PropertyType == Constants.Module.CustomType.Navigation)
         result = GetEntityByParameters(parameterRow);
       
@@ -445,19 +445,15 @@ namespace starkov.Faker.Server
     /// </summary>
     /// <param name="parameterRow">Строка с параметрами</param>
     /// <returns>Перечисление</returns>
-    public virtual Enumeration? GetEnumByParameters(IParametersMatchingParameters parameterRow)
+    public virtual Enumeration? GetEnumByParameters(IParametersMatchingParameters parameterRow, List<starkov.Faker.Structures.Module.PropertyInfo> propertiesInfo)
     {
       Enumeration? newEnum = null;
-      var databook = parameterRow.ParametersMatching;
+      var enumValues = propertiesInfo.FirstOrDefault(_ => _.Name == parameterRow.PropertyName).EnumCollection;
       
       if (parameterRow.FillOption == Constants.Module.FillOptions.Common.FixedValue)
-        newEnum = new Enumeration(parameterRow.ChosenValue);
+        newEnum = new Enumeration(enumValues.Where(_ => _.LocalizedName == parameterRow.ChosenValue).Select(_ => _.Name).FirstOrDefault());
       else if (parameterRow.FillOption == Constants.Module.FillOptions.Common.RandomValue)
-      {
-        var properties = Functions.Module.GetPropertiesType(databook.DatabookType?.DatabookTypeGuid ?? databook.DocumentType?.DocumentTypeGuid);
-        var enumValues = properties.FirstOrDefault(_ => _.Name == parameterRow.PropertyName).EnumCollection;
-        newEnum = Functions.Module.PickRandomEnumeration(enumValues);
-      }
+        newEnum = Functions.Module.PickRandomEnumeration(enumValues.Select(_ => _.Name).ToList());
       
       return newEnum;
     }
@@ -519,26 +515,6 @@ namespace starkov.Faker.Server
     }
     
     /// <summary>
-    /// Получить последний Guid типа
-    /// </summary>
-    /// <param name="guid">Guid типа сущности</param>
-    /// <returns>Последний Guid типа</returns>
-    [Remote]
-    public virtual string GetFinalTypeGuidByAncestor(string guid)
-    {
-      var typeGuid = Guid.Parse(guid);
-      var type = TypeExtension.GetTypeByGuid(typeGuid);
-      if (type == null || !type.GetEntityMetadata().IsAncestorMetadata)
-        return guid;
-      
-      var finalType = type.GetFinalType();
-      if (finalType == null)
-        return guid;
-      
-      return finalType.GUID.ToString();
-    }
-    
-    /// <summary>
     /// Получить список с информацией о реквизитах типа сущности
     /// </summary>
     /// <param name="guid">Guid типа сущности</param>
@@ -554,6 +530,11 @@ namespace starkov.Faker.Server
         return propertiesList;
       
       var typeMetadata = type.GetFinalType().GetEntityMetadata();
+      IEntity entity = null;
+      AccessRights.AllowRead(() =>
+                             {
+                               entity = CreateEntityByTypeGuid(typeMetadata.NameGuid.ToString());
+                             });
       
       var excludeProperties = Functions.Module.GetExcludeProperties();
       var excludePropertyTypes = Functions.Module.GetExcludePropertyTypes();
@@ -571,19 +552,41 @@ namespace starkov.Faker.Server
                                                                  Constants.Module.CustomType.String,
                                                                  string.Empty,
                                                                  true,
-                                                                 new List<string>(),
+                                                                 new List<Structures.Module.EnumerationInfo>(),
                                                                  null));
       }
       
       foreach (var propertyMetadata in properties)
       {
+        #region Получение локализованных значений перечислений
+        
+        var enumInfo = new List<Structures.Module.EnumerationInfo>();
+        if (propertyMetadata is Sungero.Metadata.EnumPropertyMetadata)
+        {
+          var infoProperties = entity.Info.Properties;
+          var propertyEnumeration = infoProperties.GetType().GetProperty(propertyMetadata.Name);
+          if (propertyEnumeration != null)
+          {
+            var enumPropertyInfo = propertyEnumeration.GetValue(infoProperties) as Sungero.Domain.Shared.EnumPropertyInfo;
+            foreach (string val in (propertyMetadata as Sungero.Metadata.EnumPropertyMetadata).Values.Select(_ => _.Name))
+              enumInfo.Add(Structures.Module.EnumerationInfo.Create(val, enumPropertyInfo.GetLocalizedValue(new Enumeration(val))));
+          }
+        }
+        
+        #endregion
+        
         propertiesList.Add(Structures.Module.PropertyInfo.Create(propertyMetadata.Name,
                                                                  propertyMetadata.GetLocalizedName().ToString(),
                                                                  propertyMetadata.PropertyType.ToString(),
                                                                  (propertyMetadata as Sungero.Metadata.NavigationPropertyMetadata)?.EntityGuid.ToString() ?? string.Empty,
                                                                  propertyMetadata.IsRequired,
-                                                                 (propertyMetadata as Sungero.Metadata.EnumPropertyMetadata)?.Values.Select(_ => _.Name).ToList() ?? new List<string>(),
+                                                                 enumInfo,
                                                                  (propertyMetadata as Sungero.Metadata.StringPropertyMetadata)?.Length));
+      }
+      
+      using (var session = new Sungero.Domain.Session())
+      {
+        session.Delete(entity);
       }
       
       return propertiesList;

@@ -73,4 +73,7 @@
   <data name="Property_DatabookTypeGuid" xml:space="preserve">
     <value>Идентификатор типа</value>
   </data>
+  <data name="Property_AncestorGuids" xml:space="preserve">
+    <value>Guid'ы предков</value>
+  </data>
 </root>
